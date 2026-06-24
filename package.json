@@ -1,0 +1,17 @@
+{
+  "name": "petstore-pipeline-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:petstore": "node run_petstore_tests.mjs",
+    "test:petstore-plan": "node run_petstore_plan_tests.mjs",
+    "test:petstore-all": "node run_all_tc.mjs"
+  },
+  "dependencies": {
+    "csv-parse": "^5.0.0",
+    "node-fetch": "^3.4.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

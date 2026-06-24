@@ -1,0 +1,466 @@
+﻿Area;Endpoint;Method;Category;TestCaseID;Test Case Title;Preconditions;Test Data / Request;Steps;Expected Result;Expected HTTP Status;Priority;AI vs Manual;Notes
+Pet;/pet;POST;Positive;TC-001;Create pet with valid JSON body;Swagger Petstore API available;"{
+  ""id"": 91001,
+  ""category"": {
+    ""id"": 1,
+    ""name"": ""Dogs""
+  },
+  ""name"": ""AzizaTestDog"",
+  ""photoUrls"": [
+    ""https://example.com/dog.jpg""
+  ],
+  ""tags"": [
+    {
+      ""id"": 1,
+      ""name"": ""automation""
+    }
+  ],
+  ""status"": ""available""
+}";"1. Open Swagger UI or API client
+2. Execute POST /pet
+3. Validate status code and response body";Pet is created and response contains id, name and status.;200 / successful operation;High;AI generated + manually refined;
+Pet;/pet;POST;Negative;TC-002;Reject invalid input for Add a new pet to the store;Swagger Petstore API available;"{
+  ""invalid"": ""body"",
+  ""id"": ""abc""
+}";"1. Open Swagger UI or API client
+2. Execute POST /pet
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet;POST;Edge Case;TC-003;Boundary and unusual values for Add a new pet to the store;Swagger Petstore API available;Boundary values, null fields, long strings, missing optional fields;"1. Open Swagger UI or API client
+2. Execute POST /pet
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet;POST;Security;TC-004;Injection and unauthorized input for Add a new pet to the store;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /pet
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet;POST;Business Logic;TC-005;Business rule validation for Add a new pet to the store;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute POST /pet
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet;PUT;Positive;TC-006;Update existing pet with valid JSON body;Pet with id 91001 exists;"{
+  ""id"": 91001,
+  ""category"": {
+    ""id"": 1,
+    ""name"": ""Dogs""
+  },
+  ""name"": ""AzizaUpdatedDog"",
+  ""photoUrls"": [
+    ""https://example.com/dog.jpg""
+  ],
+  ""tags"": [
+    {
+      ""id"": 1,
+      ""name"": ""automation""
+    }
+  ],
+  ""status"": ""sold""
+}";"1. Open Swagger UI or API client
+2. Execute PUT /pet
+3. Validate status code and response body";Existing pet is updated and response contains updated fields.;200 / successful operation;High;AI generated + manually refined;
+Pet;/pet;PUT;Negative;TC-007;Reject invalid input for Update an existing pet;Swagger Petstore API available;"{
+  ""invalid"": ""body"",
+  ""id"": ""abc""
+}";"1. Open Swagger UI or API client
+2. Execute PUT /pet
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet;PUT;Edge Case;TC-008;Boundary and unusual values for Update an existing pet;Swagger Petstore API available;Boundary values, null fields, long strings, missing optional fields;"1. Open Swagger UI or API client
+2. Execute PUT /pet
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet;PUT;Security;TC-009;Injection and unauthorized input for Update an existing pet;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute PUT /pet
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet;PUT;Business Logic;TC-010;Business rule validation for Update an existing pet;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute PUT /pet
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet/findByStatus;GET;Positive;TC-011;Find pets with valid status available;Swagger Petstore API available;Query parameter: status=available;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByStatus
+3. Validate status code and response body";Response is a list of pets with status available.;200;High;AI generated + manually refined;
+Pet;/pet/findByStatus;GET;Negative;TC-012;Reject invalid input for Find pets by status;Swagger Petstore API available;Query parameter: status=invalidStatus;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByStatus
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet/findByStatus;GET;Edge Case;TC-013;Boundary and unusual values for Find pets by status;Swagger Petstore API available;"status=available,pending,sold; status missing; repeated status values";"1. Open Swagger UI or API client
+2. Execute GET /pet/findByStatus
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet/findByStatus;GET;Security;TC-014;Injection and unauthorized input for Find pets by status;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByStatus
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet/findByStatus;GET;Business Logic;TC-015;Business rule validation for Find pets by status;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByStatus
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet/findByTags;GET;Positive;TC-016;Find pets with valid tag;Swagger Petstore API available;Query parameter: tags=automation;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByTags
+3. Validate status code and response body";Response is a list. Pets may be returned if matching tag exists.;200;Medium;AI generated + manually refined;
+Pet;/pet/findByTags;GET;Negative;TC-017;Reject invalid input for Find pets by tags;Swagger Petstore API available;Query parameter: tags=;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByTags
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet/findByTags;GET;Edge Case;TC-018;Boundary and unusual values for Find pets by tags;Swagger Petstore API available;"tags=tag1,tag2,tag3; very long tag; special character tag";"1. Open Swagger UI or API client
+2. Execute GET /pet/findByTags
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet/findByTags;GET;Security;TC-019;Injection and unauthorized input for Find pets by tags;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByTags
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet/findByTags;GET;Business Logic;TC-020;Business rule validation for Find pets by tags;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute GET /pet/findByTags
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet/{petId};GET;Positive;TC-021;Get existing pet by valid petId;Pet with id 91001 exists;Path parameter: petId=91001;"1. Open Swagger UI or API client
+2. Execute GET /pet/{petId}
+3. Validate status code and response body";Response contains pet details for the requested petId.;200;High;AI generated + manually refined;
+Pet;/pet/{petId};GET;Negative;TC-022;Reject invalid input for Find pet by ID;Swagger Petstore API available;Path parameter: petId=invalid / abc / 999999999999;"1. Open Swagger UI or API client
+2. Execute GET /pet/{petId}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet/{petId};GET;Edge Case;TC-023;Boundary and unusual values for Find pet by ID;Swagger Petstore API available;petId=0, petId=-1, petId=9223372036854775807;"1. Open Swagger UI or API client
+2. Execute GET /pet/{petId}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet/{petId};GET;Security;TC-024;Injection and unauthorized input for Find pet by ID;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /pet/{petId}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet/{petId};GET;Business Logic;TC-025;Business rule validation for Find pet by ID;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute GET /pet/{petId}
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet/{petId};POST;Positive;TC-026;Update pet using form data;Pet with id 91001 exists;"petId=91001
+name=UpdatedByForm
+status=pending";"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}
+3. Validate status code and response body";Pet is updated via form data.;200;Medium;AI generated + manually refined;
+Pet;/pet/{petId};POST;Negative;TC-027;Reject invalid input for Update pet with form data;Swagger Petstore API available;Path parameter: petId=invalid / abc / 999999999999;"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet/{petId};POST;Edge Case;TC-028;Boundary and unusual values for Update pet with form data;Swagger Petstore API available;petId=0, petId=-1, petId=9223372036854775807;"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet/{petId};POST;Security;TC-029;Injection and unauthorized input for Update pet with form data;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet/{petId};POST;Business Logic;TC-030;Business rule validation for Update pet with form data;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet/{petId};DELETE;Positive;TC-031;Delete existing pet;Pet with id 91001 exists;Path parameter: petId=91001;"1. Open Swagger UI or API client
+2. Execute DELETE /pet/{petId}
+3. Validate status code and response body";Pet is deleted or deletion is accepted.;200;High;AI generated + manually refined;
+Pet;/pet/{petId};DELETE;Negative;TC-032;Reject invalid input for Delete pet;Swagger Petstore API available;Path parameter: petId=invalid / abc / 999999999999;"1. Open Swagger UI or API client
+2. Execute DELETE /pet/{petId}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet/{petId};DELETE;Edge Case;TC-033;Boundary and unusual values for Delete pet;Swagger Petstore API available;petId=0, petId=-1, petId=9223372036854775807;"1. Open Swagger UI or API client
+2. Execute DELETE /pet/{petId}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet/{petId};DELETE;Security;TC-034;Injection and unauthorized input for Delete pet;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute DELETE /pet/{petId}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet/{petId};DELETE;Business Logic;TC-035;Business rule validation for Delete pet;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute DELETE /pet/{petId}
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Pet;/pet/{petId}/uploadImage;POST;Positive;TC-036;Upload valid image for existing pet;Pet exists and valid image file is selected;"petId=91001
+additionalMetadata=profile image
+file=dog.jpg";"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}/uploadImage
+3. Validate status code and response body";Image upload is accepted and ApiResponse is returned.;200;Medium;AI generated + manually refined;
+Pet;/pet/{petId}/uploadImage;POST;Negative;TC-037;Reject invalid input for Upload pet image;Swagger Petstore API available;Path parameter: petId=invalid / abc / 999999999999;"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}/uploadImage
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Pet;/pet/{petId}/uploadImage;POST;Edge Case;TC-038;Boundary and unusual values for Upload pet image;Swagger Petstore API available;petId=0, petId=-1, petId=9223372036854775807;"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}/uploadImage
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Pet;/pet/{petId}/uploadImage;POST;Security;TC-039;Injection and unauthorized input for Upload pet image;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}/uploadImage
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Pet;/pet/{petId}/uploadImage;POST;Business Logic;TC-040;Business rule validation for Upload pet image;Swagger Petstore API available;Create/update/delete pet lifecycle: create pet, retrieve it, update status, then delete and verify not found.;"1. Open Swagger UI or API client
+2. Execute POST /pet/{petId}/uploadImage
+3. Validate status code and response body";"Pet lifecycle remains consistent; deleted pet should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Store;/store/inventory;GET;Positive;TC-041;Get store inventory;Swagger Petstore API available;No request body;"1. Open Swagger UI or API client
+2. Execute GET /store/inventory
+3. Validate status code and response body";Response is a JSON object/map with inventory values.;200;High;AI generated + manually refined;
+Store;/store/inventory;GET;Negative;TC-042;Reject invalid input for Get inventory;Swagger Petstore API available;Invalid or missing required input;"1. Open Swagger UI or API client
+2. Execute GET /store/inventory
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Store;/store/inventory;GET;Edge Case;TC-043;Boundary and unusual values for Get inventory;Swagger Petstore API available;Repeated requests, validate response remains JSON object;"1. Open Swagger UI or API client
+2. Execute GET /store/inventory
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Store;/store/inventory;GET;Security;TC-044;Injection and unauthorized input for Get inventory;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /store/inventory
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Store;/store/inventory;GET;Business Logic;TC-045;Business rule validation for Get inventory;Swagger Petstore API available;"Order lifecycle: create order for petId, retrieve order, delete order, verify not found; quantity must be positive.";"1. Open Swagger UI or API client
+2. Execute GET /store/inventory
+3. Validate status code and response body";"Order data remains consistent; invalid quantity is rejected; deleted order should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Store;/store/order;POST;Positive;TC-046;Create valid store order;Swagger Petstore API available;"{
+  ""id"": 81001,
+  ""petId"": 91001,
+  ""quantity"": 1,
+  ""shipDate"": ""2026-06-16T10:00:00.000Z"",
+  ""status"": ""placed"",
+  ""complete"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /store/order
+3. Validate status code and response body";Order is created and response contains id, petId, quantity and status.;200;High;AI generated + manually refined;
+Store;/store/order;POST;Negative;TC-047;Reject invalid input for Place an order;Swagger Petstore API available;"{
+  ""invalid"": ""body"",
+  ""id"": ""abc""
+}";"1. Open Swagger UI or API client
+2. Execute POST /store/order
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Store;/store/order;POST;Edge Case;TC-048;Boundary and unusual values for Place an order;Swagger Petstore API available;Boundary values, null fields, long strings, missing optional fields;"1. Open Swagger UI or API client
+2. Execute POST /store/order
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Store;/store/order;POST;Security;TC-049;Injection and unauthorized input for Place an order;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /store/order
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Store;/store/order;POST;Business Logic;TC-050;Business rule validation for Place an order;Swagger Petstore API available;"Order lifecycle: create order for petId, retrieve order, delete order, verify not found; quantity must be positive.";"1. Open Swagger UI or API client
+2. Execute POST /store/order
+3. Validate status code and response body";"Order data remains consistent; invalid quantity is rejected; deleted order should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Store;/store/order/{orderId};GET;Positive;TC-051;Get existing order by valid orderId;Order with id 81001 exists;Path parameter: orderId=81001;"1. Open Swagger UI or API client
+2. Execute GET /store/order/{orderId}
+3. Validate status code and response body";Response contains order details.;200;Medium;AI generated + manually refined;
+Store;/store/order/{orderId};GET;Negative;TC-052;Reject invalid input for Find order by ID;Swagger Petstore API available;Path parameter: orderId=0 / -1 / abc / 999999999999;"1. Open Swagger UI or API client
+2. Execute GET /store/order/{orderId}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Store;/store/order/{orderId};GET;Edge Case;TC-053;Boundary and unusual values for Find order by ID;Swagger Petstore API available;orderId=1, orderId=10, orderId=-1, orderId=9223372036854775807;"1. Open Swagger UI or API client
+2. Execute GET /store/order/{orderId}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Store;/store/order/{orderId};GET;Security;TC-054;Injection and unauthorized input for Find order by ID;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /store/order/{orderId}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Store;/store/order/{orderId};GET;Business Logic;TC-055;Business rule validation for Find order by ID;Swagger Petstore API available;"Order lifecycle: create order for petId, retrieve order, delete order, verify not found; quantity must be positive.";"1. Open Swagger UI or API client
+2. Execute GET /store/order/{orderId}
+3. Validate status code and response body";"Order data remains consistent; invalid quantity is rejected; deleted order should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+Store;/store/order/{orderId};DELETE;Positive;TC-056;Delete existing order by valid orderId;Order with id 81001 exists;Path parameter: orderId=81001;"1. Open Swagger UI or API client
+2. Execute DELETE /store/order/{orderId}
+3. Validate status code and response body";Order is deleted or deletion is accepted.;200;Medium;AI generated + manually refined;
+Store;/store/order/{orderId};DELETE;Negative;TC-057;Reject invalid input for Delete order by ID;Swagger Petstore API available;Path parameter: orderId=0 / -1 / abc / 999999999999;"1. Open Swagger UI or API client
+2. Execute DELETE /store/order/{orderId}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+Store;/store/order/{orderId};DELETE;Edge Case;TC-058;Boundary and unusual values for Delete order by ID;Swagger Petstore API available;orderId=1, orderId=10, orderId=-1, orderId=9223372036854775807;"1. Open Swagger UI or API client
+2. Execute DELETE /store/order/{orderId}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+Store;/store/order/{orderId};DELETE;Security;TC-059;Injection and unauthorized input for Delete order by ID;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute DELETE /store/order/{orderId}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+Store;/store/order/{orderId};DELETE;Business Logic;TC-060;Business rule validation for Delete order by ID;Swagger Petstore API available;"Order lifecycle: create order for petId, retrieve order, delete order, verify not found; quantity must be positive.";"1. Open Swagger UI or API client
+2. Execute DELETE /store/order/{orderId}
+3. Validate status code and response body";"Order data remains consistent; invalid quantity is rejected; deleted order should not be retrievable.";200 or controlled business error;High;Manual QA refinement;
+User;/user;POST;Positive;TC-061;Create user with valid body;Swagger Petstore API available;"{
+  ""id"": 71001,
+  ""username"": ""aziza_auto_01"",
+  ""firstName"": ""Aziza"",
+  ""lastName"": ""Ayo"",
+  ""email"": ""aziza.auto01@test.com"",
+  ""password"": ""Test123!"",
+  ""phone"": ""123456789"",
+  ""userStatus"": 1
+}";"1. Open Swagger UI or API client
+2. Execute POST /user
+3. Validate status code and response body";User is created successfully.;default / successful operation;High;AI generated + manually refined;
+User;/user;POST;Negative;TC-062;Reject invalid input for Create user;Swagger Petstore API available;"{
+  ""invalid"": ""body"",
+  ""id"": ""abc""
+}";"1. Open Swagger UI or API client
+2. Execute POST /user
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user;POST;Edge Case;TC-063;Boundary and unusual values for Create user;Swagger Petstore API available;Boundary values, null fields, long strings, missing optional fields;"1. Open Swagger UI or API client
+2. Execute POST /user
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user;POST;Security;TC-064;Injection and unauthorized input for Create user;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /user
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user;POST;Business Logic;TC-065;Business rule validation for Create user;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute POST /user
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/createWithArray;POST;Positive;TC-066;Create multiple users with array;Swagger Petstore API available;"[
+  {
+    ""id"": 71001,
+    ""username"": ""aziza_auto_01"",
+    ""firstName"": ""Aziza"",
+    ""lastName"": ""Ayo"",
+    ""email"": ""aziza.auto01@test.com"",
+    ""password"": ""Test123!"",
+    ""phone"": ""123456789"",
+    ""userStatus"": 1
+  },
+  {
+    ""id"": 71002,
+    ""username"": ""aziza_auto_02"",
+    ""firstName"": ""Aziza"",
+    ""lastName"": ""Ayo"",
+    ""email"": ""aziza.auto02@test.com"",
+    ""password"": ""Test123!"",
+    ""phone"": ""123456789"",
+    ""userStatus"": 1
+  }
+]";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithArray
+3. Validate status code and response body";Users are created successfully.;default / successful operation;High;AI generated + manually refined;
+User;/user/createWithArray;POST;Negative;TC-067;Reject invalid input for Create users with array;Swagger Petstore API available;"{
+  ""invalid"": ""body"",
+  ""id"": ""abc""
+}";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithArray
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/createWithArray;POST;Edge Case;TC-068;Boundary and unusual values for Create users with array;Swagger Petstore API available;"[]
+Large list with 50+ users
+Mixed valid and invalid users";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithArray
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/createWithArray;POST;Security;TC-069;Injection and unauthorized input for Create users with array;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithArray
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/createWithArray;POST;Business Logic;TC-070;Business rule validation for Create users with array;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithArray
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/createWithList;POST;Positive;TC-071;Create multiple users with list;Swagger Petstore API available;"[
+  {
+    ""id"": 71001,
+    ""username"": ""aziza_auto_01"",
+    ""firstName"": ""Aziza"",
+    ""lastName"": ""Ayo"",
+    ""email"": ""aziza.auto01@test.com"",
+    ""password"": ""Test123!"",
+    ""phone"": ""123456789"",
+    ""userStatus"": 1
+  },
+  {
+    ""id"": 71003,
+    ""username"": ""aziza_auto_03"",
+    ""firstName"": ""Aziza"",
+    ""lastName"": ""Ayo"",
+    ""email"": ""aziza.auto03@test.com"",
+    ""password"": ""Test123!"",
+    ""phone"": ""123456789"",
+    ""userStatus"": 1
+  }
+]";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithList
+3. Validate status code and response body";Users are created successfully.;default / successful operation;High;AI generated + manually refined;
+User;/user/createWithList;POST;Negative;TC-072;Reject invalid input for Create users with list;Swagger Petstore API available;"[
+  {
+    ""id"": ""abc"",
+    ""username"": ""invalidUser""
+  }
+]";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithList
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/createWithList;POST;Edge Case;TC-073;Boundary and unusual values for Create users with list;Swagger Petstore API available;"[]
+Large list with 50+ users
+Mixed valid and invalid users";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithList
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/createWithList;POST;Security;TC-074;Injection and unauthorized input for Create users with list;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithList
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/createWithList;POST;Business Logic;TC-075;Business rule validation for Create users with list;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute POST /user/createWithList
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/{username};GET;Positive;TC-076;Get existing user by username;User aziza_auto_01 exists;Path parameter: username=aziza_auto_01;"1. Open Swagger UI or API client
+2. Execute GET /user/{username}
+3. Validate status code and response body";Response contains user data.;200;Medium;AI generated + manually refined;
+User;/user/{username};GET;Negative;TC-077;Reject invalid input for Get user by username;Swagger Petstore API available;Path parameter: username=nonExistingUser123 or empty username;"1. Open Swagger UI or API client
+2. Execute GET /user/{username}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/{username};GET;Edge Case;TC-078;Boundary and unusual values for Get user by username;Swagger Petstore API available;username='', username='a'*256, username with spaces;"1. Open Swagger UI or API client
+2. Execute GET /user/{username}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/{username};GET;Security;TC-079;Injection and unauthorized input for Get user by username;Swagger Petstore API available;username=' OR '1'='1 / <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /user/{username}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/{username};GET;Business Logic;TC-080;Business rule validation for Get user by username;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute GET /user/{username}
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/{username};PUT;Positive;TC-081;Update existing user;User aziza_auto_01 exists;"{
+  ""id"": 71001,
+  ""username"": ""aziza_auto_01"",
+  ""firstName"": ""AzizaUpdated"",
+  ""lastName"": ""Ayo"",
+  ""email"": ""aziza.auto01@test.com"",
+  ""password"": ""Test123!"",
+  ""phone"": ""123456789"",
+  ""userStatus"": 1
+}";"1. Open Swagger UI or API client
+2. Execute PUT /user/{username}
+3. Validate status code and response body";User is updated successfully.;default / successful operation;Medium;AI generated + manually refined;
+User;/user/{username};PUT;Negative;TC-082;Reject invalid input for Update user;Swagger Petstore API available;Path parameter: username=nonExistingUser123 or empty username;"1. Open Swagger UI or API client
+2. Execute PUT /user/{username}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/{username};PUT;Edge Case;TC-083;Boundary and unusual values for Update user;Swagger Petstore API available;username='', username='a'*256, username with spaces;"1. Open Swagger UI or API client
+2. Execute PUT /user/{username}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/{username};PUT;Security;TC-084;Injection and unauthorized input for Update user;Swagger Petstore API available;"{
+  ""username"": ""'; DROP TABLE users;--"",
+  ""name"": ""<script>alert('xss')</script>"",
+  ""admin"": true
+}";"1. Open Swagger UI or API client
+2. Execute PUT /user/{username}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/{username};PUT;Business Logic;TC-085;Business rule validation for Update user;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute PUT /user/{username}
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/{username};DELETE;Positive;TC-086;Delete existing user;User aziza_auto_01 exists;Path parameter: username=aziza_auto_01;"1. Open Swagger UI or API client
+2. Execute DELETE /user/{username}
+3. Validate status code and response body";User is deleted successfully.;200 / default;Medium;AI generated + manually refined;
+User;/user/{username};DELETE;Negative;TC-087;Reject invalid input for Delete user;Swagger Petstore API available;Path parameter: username=nonExistingUser123 or empty username;"1. Open Swagger UI or API client
+2. Execute DELETE /user/{username}
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/{username};DELETE;Edge Case;TC-088;Boundary and unusual values for Delete user;Swagger Petstore API available;username='', username='a'*256, username with spaces;"1. Open Swagger UI or API client
+2. Execute DELETE /user/{username}
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/{username};DELETE;Security;TC-089;Injection and unauthorized input for Delete user;Swagger Petstore API available;username=' OR '1'='1 / <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute DELETE /user/{username}
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/{username};DELETE;Business Logic;TC-090;Business rule validation for Delete user;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute DELETE /user/{username}
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/login;GET;Positive;TC-091;Login with valid username and password;User exists;Query parameters: username=aziza_auto_01&password=Test123!;"1. Open Swagger UI or API client
+2. Execute GET /user/login
+3. Validate status code and response body";Login accepted and response message/session info returned.;200;Medium;AI generated + manually refined;
+User;/user/login;GET;Negative;TC-092;Reject invalid input for Login user;Swagger Petstore API available;Query parameters: username=wrongUser&password=wrongPassword;"1. Open Swagger UI or API client
+2. Execute GET /user/login
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/login;GET;Edge Case;TC-093;Boundary and unusual values for Login user;Swagger Petstore API available;empty username/password, very long password, special characters;"1. Open Swagger UI or API client
+2. Execute GET /user/login
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/login;GET;Security;TC-094;Injection and unauthorized input for Login user;Swagger Petstore API available;username=' OR '1'='1 / <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /user/login
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/login;GET;Business Logic;TC-095;Business rule validation for Login user;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute GET /user/login
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;
+User;/user/logout;GET;Positive;TC-096;Logout current user session;Swagger Petstore API available;No request body;"1. Open Swagger UI or API client
+2. Execute GET /user/logout
+3. Validate status code and response body";Logout request is accepted.;default / successful operation;Medium;AI generated + manually refined;
+User;/user/logout;GET;Negative;TC-097;Reject invalid input for Logout user;Swagger Petstore API available;Invalid or missing required input;"1. Open Swagger UI or API client
+2. Execute GET /user/logout
+3. Validate status code and response body";API should reject invalid request and return client error instead of server error.;400 / 404 / default error expected;High;AI generated + manually refined;Manual validation needed because public Petstore may behave inconsistently.
+User;/user/logout;GET;Edge Case;TC-098;Boundary and unusual values for Logout user;Swagger Petstore API available;"Logout without previous login; repeated logout request";"1. Open Swagger UI or API client
+2. Execute GET /user/logout
+3. Validate status code and response body";API handles boundary values without crashing.;200 or controlled 4xx;Medium;AI generated + manually refined;
+User;/user/logout;GET;Security;TC-099;Injection and unauthorized input for Logout user;Swagger Petstore API available;Use injection strings in query/path params: ' OR '1'='1, <script>alert(1)</script>;"1. Open Swagger UI or API client
+2. Execute GET /user/logout
+3. Validate status code and response body";API must not execute injected input, must not expose sensitive error details, and must not grant unauthorized access.;4xx or sanitized response;High;AI generated + manually refined;Security test: SQL injection, XSS, unexpected fields, oversized payload.
+User;/user/logout;GET;Business Logic;TC-100;Business rule validation for Logout user;Swagger Petstore API available;"User lifecycle: create user, retrieve user, update user, login, logout, delete user; duplicate username should be handled.";"1. Open Swagger UI or API client
+2. Execute GET /user/logout
+3. Validate status code and response body";"User lifecycle remains consistent; duplicate or invalid users are handled according to business rules.";200 or controlled business error;High;Manual QA refinement;

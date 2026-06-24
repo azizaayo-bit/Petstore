@@ -1,0 +1,7 @@
+Add automated Petstore API tests and test plan
+
+- Added CSV-driven runners: run_petstore_tests.mjs, run_all_tc.mjs
+- Added plan-based runner: run_petstore_plan_tests.mjs
+- Added test plan: specs/petstore-test-plan.md
+- Added README.md and package.json scripts
+- Added test results are written to test_results*.json
