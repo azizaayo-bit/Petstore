@@ -1,5 +1,5 @@
 # Swagger Petstore All Endpoints - Test Plan
-#Aziza
+
 ## Application Overview
 
 Comprehensive test plan derived from Swagger_Petstore_All_Endpoints_TestCases100.csv. Organized by endpoint area (Pet, Store, User) and covering Positive, Negative, Edge Case, Security, and Business Logic scenarios. Assumes access to https://petstore.swagger.io/v2 and a clean test state or unique test IDs.
