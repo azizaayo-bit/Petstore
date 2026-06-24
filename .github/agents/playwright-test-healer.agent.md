@@ -7,12 +7,20 @@ tools:
   - playwright-test/browser_console_messages
   - playwright-test/browser_evaluate
   - playwright-test/browser_generate_locator
+<<<<<<< HEAD
+=======
+  - playwright-test/browser_network_request
+>>>>>>> 342839b432c403c9ee73b11dc2606c6621b749f4
   - playwright-test/browser_network_requests
   - playwright-test/browser_snapshot
   - playwright-test/test_debug
   - playwright-test/test_list
   - playwright-test/test_run
+<<<<<<< HEAD
 model: Claude Sonnet 4
+=======
+model: Claude Sonnet 4.6
+>>>>>>> 342839b432c403c9ee73b11dc2606c6621b749f4
 mcp-servers:
   playwright-test:
     type: stdio

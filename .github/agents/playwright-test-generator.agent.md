@@ -22,7 +22,11 @@ tools:
   - playwright-test/generator_read_log
   - playwright-test/generator_setup_page
   - playwright-test/generator_write_test
+<<<<<<< HEAD
 model: Claude Sonnet 4
+=======
+model: Claude Sonnet 4.6
+>>>>>>> 342839b432c403c9ee73b11dc2606c6621b749f4
 mcp-servers:
   playwright-test:
     type: stdio

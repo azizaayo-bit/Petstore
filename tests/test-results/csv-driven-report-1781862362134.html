@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>CSV-driven Test Report</title>
+  <style>
+    body{font-family: Arial, sans-serif;padding:20px}
+    .summary{margin-bottom:16px}
+    table{border-collapse:collapse;width:100%}
+    th,td{border:1px solid #ddd;padding:8px;text-align:left}
+    th{background:#f4f4f4}
+    tr.fail{background:#ffecec}
+    tr.pass{background:#eaffea}
+    pre{white-space:pre-wrap;word-break:break-word;background:#f9f9f9;padding:8px;border-radius:4px}
+    .response{max-height:200px;overflow:auto}
+    .controls{margin-bottom:12px}
+  </style>
+</head>
+<body>
+  <h1>CSV-driven Test Report</h1>
+  <div class="controls">
+    <button id="showAll">Alle anzeigen</button>
+    <button id="showFails">Nur Fehler</button>
+    <button id="download">Download JSON</button>
+  </div>
+  <div class="summary" id="summary"></div>
+
+  <textarea id="json" style="display:none">[
+  {
+    "id": "TC-001",
+    "area": "Pet",
+    "endpoint": "/pet",
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet",
+    "expected": "200 / successful operation",
+    "status": 200,
+    "ok": true,
+    "response": "{\"id\":91001,\"category\":{\"id\":1,\"name\":\"Dogs\"},\"name\":\"AzizaTestDog\",\"photoUrls\":[\"https://example.com/dog.jpg\"],\"tags\":[{\"id\":1,\"name\":\"automation\"}],\"status\":\"available\"}"
+  },
+  {
+    "id": "TC-002",
+    "area": "Pet",
+    "endpoint": "/pet",
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet",
+    "expected": "400 / 404 / default error expected",
+    "status": 500,
+    "ok": false,
+    "response": "{\"code\":500,\"type\":\"unknown\",\"message\":\"something bad happened\"}"
+  },
+  {
+    "id": "TC-003",
+    "area": "Pet",
+    "endpoint": "/pet",
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet",
+    "expected": "200 or controlled 4xx",
+    "status": 415,
+    "ok": false,
+    "response": "{\"code\":415,\"type\":\"unknown\",\"message\":\"com.sun.jersey.api.MessageException: A message body reader for Java class io.swagger.sample.model.Pet, and Java type class io.swagger.sample.model.Pet, and MIME media type application/octet-stream was not found.\\nThe registered message body readers compatible with the MIME media type are:...\"}"
+  },
+  {
+    "id": "TC-004",
+    "area": "Pet",
+    "endpoint": "/pet",
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet",
+    "expected": "4xx or sanitized response",
+    "status": 200,
+    "ok": true,
+    "response": "{\"id\":9223372036854775807,\"name\":\"<script>alert('xss')<\\/script>\",\"photoUrls\":[],\"tags\":[]}"
+  },
+  {
+    "id": "TC-005",
+    "area": "Pet",
+    "endpoint": "/pet",
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet",
+    "expected": "200 or controlled business error",
+    "status": 415,
+    "ok": false,
+    "response": "{\"code\":415,\"type\":\"unknown\",\"message\":\"com.sun.jersey.api.MessageException: A message body reader for Java class io.swagger.sample.model.Pet...\"}"
+  }
+  ]</textarea>
+
+  <div id="report"></div>
+
+  <script>
+    const raw = document.getElementById('json').value;
+    let data = [];
+    try { data = JSON.parse(raw); } catch (e) { document.getElementById('report').innerText = 'Report konnte nicht geparst werden: ' + e; }
+
+    function renderSummary(d){
+      const total = d.length;
+      const passed = d.filter(x => x.ok).length;
+      const failed = total - passed;
+      document.getElementById('summary').innerHTML = `<strong>Total:</strong> ${total} &nbsp; <strong>Passed:</strong> ${passed} &nbsp; <strong>Failed:</strong> ${failed}`;
+    }
+
+    function renderTable(d){
+      const container = document.getElementById('report');
+      const tbl = document.createElement('table');
+      const thead = document.createElement('thead');
+      thead.innerHTML = '<tr><th>ID</th><th>Area</th><th>Method</th><th>Endpoint / URL</th><th>Expected</th><th>Status</th><th>Result</th><th>Response</th></tr>';
+      tbl.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      d.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = row.ok ? 'pass' : 'fail';
+        tr.innerHTML = `<td>${row.id||''}</td><td>${row.area||''}</td><td>${row.method||''}</td><td title="${row.url||''}">${row.endpoint||''}</td><td>${row.expected||''}</td><td>${row.status||''}</td><td>${row.ok? 'PASS':'FAIL'}</td><td><button class="show">Show</button><div class="response" style="display:none;"><pre>${(row.response||'').replace(/</g,'&lt;')}</pre></div></td>`;
+        tbody.appendChild(tr);
+      });
+      tbl.appendChild(tbody);
+      container.innerHTML = '';
+      container.appendChild(tbl);
+
+      // attach listeners for show buttons
+      document.querySelectorAll('button.show').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const div = btn.nextElementSibling;
+          if (div.style.display === 'none') div.style.display = 'block'; else div.style.display = 'none';
+        });
+      });
+    }
+
+    renderSummary(data);
+    renderTable(data);
+
+    document.getElementById('showFails').addEventListener('click', () => {
+      const onlyFails = data.filter(x => !x.ok);
+      renderSummary(onlyFails);
+      renderTable(onlyFails);
+    });
+    document.getElementById('showAll').addEventListener('click', () => {
+      renderSummary(data);
+      renderTable(data);
+    });
+    document.getElementById('download').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'csv-driven-report.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
