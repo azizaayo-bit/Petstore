@@ -1,29 +1,28 @@
 {
-<<<<<<< HEAD
-  "name": "petstore-pipeline-tests",
+  "name": "petstore-playwright-ai-tests",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "test:petstore": "node run_petstore_tests.mjs",
+    "test": "npx playwright test",
+    "test:csv": "node run_petstore_tests.mjs",
     "test:petstore-plan": "node run_petstore_plan_tests.mjs",
-    "test:petstore-all": "node run_all_tc.mjs"
+    "test:petstore-all": "node run_all_tc.mjs",
+    "autopush": "git add . && git commit -m \"auto\" && git pull origin main --rebase && git push origin main"
   },
   "dependencies": {
     "csv-parse": "^5.0.0",
     "node-fetch": "^3.4.0"
   },
-  "engines": {
-    "node": ">=18"
-=======
-  "name": "petstore-playwright-tests",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "test": "npx playwright test",
-    "test:csv": "npx playwright test tests/csv-driven.spec.ts"
-  },
   "devDependencies": {
     "@playwright/test": "^1.39.0"
->>>>>>> 342839b432c403c9ee73b11dc2606c6621b749f4
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azizaayo-bit/Petstore.git"
+  },
+  "license": "MIT"
 }
